@@ -1,9 +1,15 @@
-include Num
+include List
 
-let double x = times two x
+let t = "9" @@ "1" @@ "2" @@ "3" @@ empty
 
-let t = ack three (double three)
+let tt = "5" @@ "3" @@ "7" @@ empty
 
-let s = toInt t
+let ttt = append t tt
 
-let _ = Format.printf "%d\n" s
+let ttt = map (fun x -> x ^ x) ttt
+
+let _ = print ttt
+
+let a = length ttt
+
+let _ = Format.printf "%d\n" a
