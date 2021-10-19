@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for i in *.ml; do
+        ocamlformat --enable-outside-detected-project $i > $i.temp
+        mv $i.temp $i
+done
