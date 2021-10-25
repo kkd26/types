@@ -40,25 +40,23 @@ let rec subst e n = function
 
 let rec reduce = function
   | Var _ -> None
-  | Int n -> None
-  | Bool b -> None
+  | Int _ -> None
+  | Bool _ -> None
   | If (e, e1, e2) -> (
-      match e with
-      | Bool b -> if b then Some e1 else Some e2
-      | _ -> (
-          match reduce e with Some e -> Some (If (e, e1, e2)) | None -> None))
+    match e with
+    | Bool b -> if b then Some e1 else Some e2
+    | _ -> (
+      match reduce e with Some e -> Some (If (e, e1, e2)) | None -> None ) )
   | Unit -> None
   | Lambda _ -> None
   | App (e1, e2) -> (
-      match e1 with
-      | Lambda (t, e) -> (
-          if isValue e2 then Some (shift (-1) 0 (subst (shift 1 0 e2) 0 e))
-          else
-            match reduce e2 with Some e -> Some (App (e1, e)) | None -> None)
-      | _ -> (
-          match reduce e1 with Some e -> Some (App (e, e2)) | None -> None))
-  | Abort e -> None
+    match e1 with
+    | Lambda (_, e) -> (
+        if isValue e2 then Some (shift (-1) 0 (subst (shift 1 0 e2) 0 e))
+        else match reduce e2 with Some e -> Some (App (e1, e)) | None -> None )
+    | _ -> (
+      match reduce e1 with Some e -> Some (App (e, e2)) | None -> None ) )
+  | Abort _ -> None
 
 let doStep e = match reduce e with Some e -> e | None -> e
-
 let rec reduceAll e = match reduce e with Some e -> reduceAll e | None -> e
